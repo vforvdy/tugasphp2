@@ -1,5 +1,5 @@
 <?php
-require 'path_to_class/Supplier.php'; // Sesuaikan dengan path class Supplier
+require '../models/supplier.php'; // Sesuaikan dengan path class Supplier
 
 // Contoh inisialisasi PDO dan class Supplier
 $pdo = new PDO('mysql:host=localhost;dbname=your_database', 'username', 'password');

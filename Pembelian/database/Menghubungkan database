@@ -1,0 +1,54 @@
+<?php
+// 1. Konfigurasi koneksi ke database
+$host = 'localhost';     // Host atau IP server database
+$dbname = 'nama_database'; // Ganti dengan nama database yang sesuai
+$username = 'root';       // Username database (ganti jika perlu)
+$password = '';           // Password database (ganti jika perlu)
+$charset = 'utf8mb4';     // Karakter set yang digunakan
+
+// 2. Data Source Name (DSN)
+$dsn = "mysql:host=$host;dbname=$dbname;charset=$charset";
+
+// 3. Opsi untuk PDO
+$options = [
+    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION, // Mode error, lempar Exception jika terjadi error
+    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,       // Fetch mode default menggunakan array asosiatif
+    PDO::ATTR_EMULATE_PREPARES   => false,                  // Nonaktifkan emulasi prepared statement untuk performa yang lebih baik
+];
+
+try {
+    // 4. Buat koneksi menggunakan PDO
+    $pdo = new PDO($dsn, $username, $password, $options);
+    echo "Koneksi berhasil!<br>";
+
+    // 5. Data Supplier yang akan di-insert
+    $namaSupplier = "PT Farma Sehat";  // Contoh data
+    $alamatSupplier = "Jl. Kesehatan No. 10";  // Contoh data
+    $noHpSupplier = "081234567890";  // Contoh data
+    $idBarang = 1; // ID Barang (misalkan barang yang di-supply ada ID 1)
+
+    // 6. Query untuk insert data ke tabel Supplier
+    $sql = "INSERT INTO Supplier (NamaSupplier, AlamatSupplier, NoHpSupplier, IdBarang) 
+            VALUES (:namaSupplier, :alamatSupplier, :noHpSupplier, :idBarang)";
+
+    // 7. Persiapkan query
+    $stmt = $pdo->prepare($sql);
+
+    // 8. Bind parameter ke query
+    $stmt->bindParam(':namaSupplier', $namaSupplier);
+    $stmt->bindParam(':alamatSupplier', $alamatSupplier);
+    $stmt->bindParam(':noHpSupplier', $noHpSupplier);
+    $stmt->bindParam(':idBarang', $idBarang);
+
+    // 9. Eksekusi query
+    if ($stmt->execute()) {
+        echo "Data supplier berhasil ditambahkan!";
+    } else {
+        echo "Gagal menambahkan data supplier.";
+    }
+
+} catch (PDOException $e) {
+    // 10. Tangkap error jika koneksi gagal
+    echo "Koneksi gagal: " . $e->getMessage();
+}
+?>
